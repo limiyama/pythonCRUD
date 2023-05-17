@@ -7,7 +7,7 @@ from firebase import firebase
 cred = credentials.Certificate('./ServiceAccount.json')
 default_app = firebase_admin.initialize_app(cred)
 db = firestore.client()
-firebase = firebase.FirebaseApplication('https://pythoncrud-3ef17-default-rtdb.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication('', None)
 
 #post, cria
 def create():
