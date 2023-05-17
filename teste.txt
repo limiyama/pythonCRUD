@@ -1,0 +1,49 @@
+
+#lê o dado
+def read():
+    doc = db.collection('NYSE').document('AMZN').get()
+    return doc.to_dict()
+
+#lê coleção
+def read_collection():
+    docs = db.collection('NYSE').where('lastClose', '>', 500).stream()
+    for doc in docs:
+        stock = doc.to_dict()
+        print(stock.name)
+
+#atualiza preço
+def update_price():
+    doc_ref = db.collection('NYSE').document('AMZN').update({ 'lastClose': 3465.00 })
+
+#remove o indice
+def remove_indices():
+    doc_ref = db.collection('NYSE').document('AMZN').update({'indices': firestore.ArrayRemove(['NDX'])})
+
+#adiciona indice
+def add_indices():
+    doc_ref = db.collection('NYSE').document('AMZN').update({'indices': firestore.ArrayUnion(['SPY'])})
+
+#filtra   
+def filter_indices():
+    doc_ref = db.collection('NYSE').document('AMZN')
+    doc = doc_ref.get()
+    doc = doc.to_dict()
+    doc_ref.update({ 'indices': [x for x in doc['indices'] if x.startswith('S')] })
+
+#deleta o documento
+def delete_document():
+  db.collection('NYSE').document('AMZN').delete()
+
+#deleta
+def delete_field():
+  doc_ref = db.collection('NYSE').document('AMZN')
+  doc_ref.update({
+    'lastClose': firestore.DELETE_FIELD
+  })
+
+#deleta varios
+def delete_multiple():
+  docs = db.collection('NYSE').where('lastClose', '>', 500).stream()
+  for doc in docs:
+    doc.delete()
+
